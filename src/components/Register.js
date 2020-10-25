@@ -1,6 +1,8 @@
 import React, {useEffect} from 'react';
-import {useHistory} from 'react-route-dom';
-import { api } from '../utils/api.js';
+import {useHistory, Link, withRouter} from 'react-router-dom';
+import cardAuth from '../cardAuth.js';
+//import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
+//import { api } from '../utils/api.js';
 
 function Register () {
 
@@ -43,7 +45,7 @@ function Register () {
   
 //this is NOT DONE and none of the css is written!!!
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    //<CurrentUserContext.Provider value={currentUser}>
       <form className="register__container" onSubmit={handleSubmit}>
 
 <h2 className="register__title">Sign Up</h2>
@@ -55,12 +57,12 @@ function Register () {
 
 
 <button className= "register__save-button" type="submit" onClick={handleSubmit} >Sign Up</button>
-<p className="register__button-text">Already a member? Login here.</p>
+<Link to='/signin' className="register__button-text">Already a member? Login here.</Link>
 
 
 </form>
-    </CurrentUserContext.Provider>
+    //</CurrentUserContext.Provider>
   );
 }
 
-export default Register;
+export default withRouter(Register);

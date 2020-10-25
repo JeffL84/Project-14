@@ -1,4 +1,8 @@
 import React from 'react';
+import { Route, Switch, useHistory, withRouter} from 'react-router-dom';
+import ProtectedRoute from './ProtectedRoute.js';
+import Register from './Register.js';
+import Login from './Login.js';
 import Header from './Header';
 import Main from './Main';
 import { api } from '../utils/api.js';
@@ -18,6 +22,7 @@ function App() {
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
+  const [loggedIn, setLoggedIn] = React.useState(false);
 
   React.useEffect(() => {
     api.getUserInfo()
@@ -72,6 +77,10 @@ function App() {
       .catch(err => {
         console.log(err)
       });
+  }
+
+  function handleLogin() {
+    setLoggedIn(true);
   }
 
   //CARD section stats here
@@ -145,43 +154,45 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-
-        <Header />
-        <Main
-          onEditProfile={handleProfileClick}
-
+      <Switch>
+        <Header link = "/signin" navText = "Log Out" email={currentUser.email}/>
+        <ProtectedRoute path="/users/me" loggedIn= {handleLogin}  onEditProfile={handleProfileClick}
           onAddPlace={handleAddPlaceClick}
-
           onEditAvatar={handleEditAvatarClick}
-
           onCardClick={handleCardClick} //might have issue here - used twice...
-
           selectedCard={selectedCard}
-
           cards={cards}
-
           onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete} component = {Main} />
 
-          onCardDelete={handleCardDelete}
-        >
+        <Route path = "/signup">
+            <Header link = "/signin" navText = "login" />
+            <Register handleLogin = {handleLogin}/>
+        </Route>
 
-        </Main>
-
+        <Route path = "/signin">
+            <Header link = "signup" navText = "register" />
+            <Login handleLogin = {handleLogin}/>
+        </Route>
+       
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser} handleEditAvatarClick={handleEditAvatarClick} onClose={closeAllPopups} />
 
-        <EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} onClose={closeAllPopups} />
+<EditAvatarPopup isOpen={isEditAvatarPopupOpen} onUpdateAvatar={handleUpdateAvatar} onClose={closeAllPopups} />
 
-        <AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
+<AddPlacePopup isOpen={isAddPlacePopupOpen} onAddPlace={handleAddPlaceSubmit} onClose={closeAllPopups} />
 
-        <PopupWithForm name="delete-card" title="Are you sure?" submitButtonName="card-delete-confirm" />
+<PopupWithForm name="delete-card" title="Are you sure?" submitButtonName="card-delete-confirm" />
 
-        <ImagePopup isOpened={isImagePopupOpen} image="" title="Image Caption" card={selectedCard} onClick={handleCardClick} />
+<ImagePopup isOpened={isImagePopupOpen} image="" title="Image Caption" card={selectedCard} onClick={handleCardClick} />
 
-        <Footer />
+<Footer />
+        
+        </Switch>
+
 
       </div>
     </CurrentUserContext.Provider>
   );
 }
 
-export default App;
+export default App; // withRouter(App); Liza did this in video

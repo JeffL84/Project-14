@@ -1,6 +1,10 @@
-export const BASE_URL = 'https://register.nomoreparties.co';
+import React from 'react';
 
-export const register = (email, password) => {
+function cardAuth () {
+
+const BASE_URL = 'https://register.nomoreparties.co';
+
+const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
@@ -17,7 +21,7 @@ export const register = (email, password) => {
   .catch((err)=>console.log(err)); //possibly change this later related to Register.js
 }
 
-export const authorize = (identifier, password) => {
+const authorize = (identifier, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
@@ -41,14 +45,13 @@ export const authorize = (identifier, password) => {
 }
 
 //~3:30 in live coding if something is not working...
-export const authorize = (token) => {
+const getContent = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',
     headers: {
       "Content-Type": "application/json",
       "Authorization" : `Bearer ${token}` 
-    }, 
-    body: JSON.stringify({identifier, password})
+    }
   })
   .then((response) => {
     return response.json();
@@ -58,3 +61,7 @@ export const authorize = (token) => {
     })
   .catch((err)=>console.log(err)); //possibly change this later
 }
+
+}
+
+export default cardAuth;
