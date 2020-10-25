@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, withRouter } from 'react-router-dom';
+import React, {useEffect} from 'react';
+import {useHistory, Link, withRouter} from 'react-router-dom';
 import cardAuth from '../cardAuth';
 
 

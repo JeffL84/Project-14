@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, useHistory, withRouter} from 'react-router-dom';
+import { Route, Router, Switch, useHistory, withRouter} from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute.js';
 import Register from './Register.js';
 import Login from './Login.js';
@@ -154,6 +154,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
+
       <Switch>
         <Header link = "/signin" navText = "Log Out" email={currentUser.email}/>
         <ProtectedRoute path="/users/me" loggedIn= {handleLogin}  onEditProfile={handleProfileClick}
@@ -186,9 +187,8 @@ function App() {
 <ImagePopup isOpened={isImagePopupOpen} image="" title="Image Caption" card={selectedCard} onClick={handleCardClick} />
 
 <Footer />
-        
-        </Switch>
 
+        </Switch>
 
       </div>
     </CurrentUserContext.Provider>
