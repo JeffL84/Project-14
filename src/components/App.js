@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Router, Switch, useHistory, withRouter} from 'react-router-dom';
+import { Route, BrowserRouter, Switch, useHistory, withRouter} from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute.js';
 import Register from './Register.js';
 import Login from './Login.js';
@@ -154,10 +154,10 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
-
+    <BrowserRouter>
       <Switch>
         <Header link = "/signin" navText = "Log Out" email={currentUser.email}/>
-        <ProtectedRoute path="/users/me" loggedIn= {handleLogin}  onEditProfile={handleProfileClick}
+        <ProtectedRoute exact path="/users/me" loggedIn= {handleLogin}  onEditProfile={handleProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick} //might have issue here - used twice...
@@ -166,12 +166,12 @@ function App() {
           onCardLike={handleCardLike}
           onCardDelete={handleCardDelete} component = {Main} />
 
-        <Route path = "/signup">
+        <Route exact path = "/signup">
             <Header link = "/signin" navText = "login" />
             <Register handleLogin = {handleLogin}/>
         </Route>
 
-        <Route path = "/signin">
+        <Route exact path = "/signin">
             <Header link = "signup" navText = "register" />
             <Login handleLogin = {handleLogin}/>
         </Route>
@@ -189,6 +189,7 @@ function App() {
 <Footer />
 
         </Switch>
+        </BrowserRouter>
 
       </div>
     </CurrentUserContext.Provider>
