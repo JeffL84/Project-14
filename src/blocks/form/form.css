@@ -12,6 +12,9 @@
 @import url("./__input-error/form__input-error.css");
 @import url("./__input-error/_active/form__input-error_active.css");
 @import url("./__save-button/_type/form__save-button_type_inactive.css");
+@import url("./__text/form__text.css");
+@import url("./__content/form__content.css");
+@import url("./__image/form__image.css");
 
 .form {
   visibility: hidden;

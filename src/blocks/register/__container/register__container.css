@@ -1,0 +1,6 @@
+.register__container {
+  display: flex;
+  flex-direction: column;
+  background-color: #000000;
+  margin: auto;
+}

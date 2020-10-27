@@ -1,0 +1,7 @@
+.form__content {
+  display: flex;
+  border-radius: 10px;
+  height: 330px;
+  width: 430px;
+  background: #FFFFFF;
+}

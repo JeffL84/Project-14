@@ -8,6 +8,7 @@ import Main from './Main';
 import { api } from '../utils/api.js';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm.js';
+import InfoToolTip from './InfoToolTip.js';
 import ImagePopup from './ImagePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import EditProfilePopup from './EditProfilePopup.js';
@@ -20,6 +21,7 @@ function App() {
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = React.useState(false);
+  const [isInfoToolTipOpen, setIsInfoToolTipOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({});
   const [loggedIn, setLoggedIn] = React.useState(false);
@@ -81,6 +83,7 @@ function App() {
 
   function handleLogin() {
     setLoggedIn(true);
+    setIsInfoToolTipOpen(true);
   }
 
   //CARD section stats here
@@ -139,42 +142,39 @@ function App() {
       })
 
   }, [])
-
-  //mapping prior to attempts to fix
-  // setCards(res.map(card => ({
-  //   key: card._id,
-  //   name: card.name,
-  //   image: card.link,
-  //   likes: card.likes,
-  //   owner: card.owner,
-  //   _id: card._id
-
-
-
+//infotooltip Props might be off at this point
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
     <BrowserRouter>
       <Switch>
+      <Route path = "/signup">
+            <Header link = "/signin" navText = "login" />
+            <Register handleLogin = {handleLogin}/>
+        </Route>
+
+        <Route path = "/signin">
+            <Header link = "signup" navText = "register" />
+            <Login handleLogin = {handleLogin}/>
+        </Route>
+        
+        <Route>
         <Header link = "/signin" navText = "Log Out" email={currentUser.email}/>
-        <ProtectedRoute exact path="/users/me" loggedIn= {handleLogin}  onEditProfile={handleProfileClick}
+        </Route>
+        <ProtectedRoute 
+          exact path="/users/me" 
+          loggedIn= {loggedIn}  
+          onEditProfile={handleProfileClick}
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onCardClick={handleCardClick} //might have issue here - used twice...
           selectedCard={selectedCard}
           cards={cards}
           onCardLike={handleCardLike}
-          onCardDelete={handleCardDelete} component = {Main} />
+          onCardDelete={handleCardDelete} 
+          component = {Main} />
 
-        <Route exact path = "/signup">
-            <Header link = "/signin" navText = "login" />
-            <Register handleLogin = {handleLogin}/>
-        </Route>
-
-        <Route exact path = "/signin">
-            <Header link = "signup" navText = "register" />
-            <Login handleLogin = {handleLogin}/>
-        </Route>
+       
        
         <EditProfilePopup isOpen={isEditProfilePopupOpen} onUpdateUser={handleUpdateUser} handleEditAvatarClick={handleEditAvatarClick} onClose={closeAllPopups} />
 
@@ -184,7 +184,9 @@ function App() {
 
 <PopupWithForm name="delete-card" title="Are you sure?" submitButtonName="card-delete-confirm" />
 
-<ImagePopup isOpened={isImagePopupOpen} image="" title="Image Caption" card={selectedCard} onClick={handleCardClick} />
+<ImagePopup isOpened={isImagePopupOpen} image="" title="Image Caption" card={selectedCard} onClick={handleCardClick} />\
+
+<InfoToolTip isOpened={isInfoToolTipOpen} isValid ={loggedIn} />
 
 <Footer />
 
@@ -196,4 +198,4 @@ function App() {
   );
 }
 
-export default App; // withRouter(App); Liza did this in video
+export default withRouter(App); // withRouter(App); Liza did this in video

@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useHistory, Link, withRouter} from 'react-router-dom';
-import cardAuth from '../cardAuth';
+import * as cardAuth from '../cardAuth.js';
 
 
 function Login () {
@@ -66,10 +66,10 @@ function Login () {
 
 <h2 className="register__title">Sign In</h2>
 
-<input className="register__email form__input" type="email" id="email" name="email" minLength="2" maxLength="40" defaultValue="Email" onChange={(e) => setEmail(e.target.value)} required />
+<input className="register__email register__input" type="email" placeholder="Email" id="email" name="email" minLength="2" maxLength="40" onChange={(e) => setEmail(e.target.value)} required />
 
 
-      <input className="register__password form__input" type="text" id="password" name="password" defaultValue="Password" minLength="2" maxLength="20" onChange={(e) => setPassword(e.target.value)} required />
+      <input className="register__password register__input" type="password" id="password" name="password" placeholder="Password" minLength="2" maxLength="20" onChange={(e) => setPassword(e.target.value)} required />
 
 
 <button className= "register__save-button" type="submit" onClick={handleSubmit} >Sign In</button>

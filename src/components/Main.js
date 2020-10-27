@@ -1,5 +1,5 @@
 import React from 'react';
-
+//import Header from './Header.js';
 import Card from './Card';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 
@@ -8,18 +8,8 @@ function Main(props) {
 
   const currentUser = React.useContext(CurrentUserContext);
 
-  //console.log(currentUser);
-
-  // const [userName, setUserName] = React.useState("Name Placeholder");
-  // const [userDescription, setUserDescription] = React.useState("Description Placeholder");
-  // const [userAvatar, setUserAvatar] = React.useState("(.././images/blackheart.svg)");
-
-
-
-
   return (
     <main>
-
       <section className="profile section-width">
 
         <div className="profile__section">
@@ -63,20 +53,6 @@ function Main(props) {
         </ul>
 
       </section>
-
-      {/* mapping prior to attmepts to fix
-      props.cards.map((card, i) =>
-              <Card
-                key={i}
-                name={card.name}
-                image={card.image}
-                likes={card.likes}
-                card={card}
-                onCardClick={props.onCardClick}
-                onCardLike={props.onCardLike}
-                onCardDelete={props.onCardDelete} */}
-
-
     </main>
 
   );

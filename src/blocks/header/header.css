@@ -1,10 +1,11 @@
 @import url("./__vector/header__vector.css");
-
+@import url("./__content/header__content.css");
 
 .header {
   font-family: 'Inter', "Arial", sans-serif;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   margin: 0 auto;
   height: 74px; 
   border-bottom: 1px solid #545454; 
