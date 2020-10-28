@@ -10,9 +10,11 @@ export const register = (email, password) => {
     body: JSON.stringify({email, password})
   })
   .then((response) => {
+    //console.log('register', response);
     return response.json();
   })
   .then((res) => {
+   // console.log('register part 2', res);
     return res;
   })
   .catch((err)=>console.log(err)); //possibly change this later related to Register.js
@@ -28,12 +30,13 @@ export const authorize = (email, password) => {
     body: JSON.stringify({email, password})
   })
   .then((response) => {
-    console.log('authorize', response);
+    //console.log('authorize', response);
     return response.json();
   })
   .then((data) => {
-    if(data.user) {
-      localStorage.setItem('jwt', data.jwt);
+    if(data.token) {
+      //console.log('authorize part 2', data);
+      localStorage.setItem('jwt', data.token);
       return data;
     }
     else {

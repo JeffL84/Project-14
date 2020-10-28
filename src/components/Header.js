@@ -11,7 +11,7 @@ function Header(props) {
       <img className="header__vector" src={headervector} alt="Around Vector" />
       <div className= "header__content">
         <p>{props.email}</p>
-        <Link className = "header__link header__content" to = {props.link}>{props.navText}</Link>
+        <Link className = "header__link header__content" onClick={props.handleLogout} to={props.link}>{props.navText}</Link>
       </div>
 
     </header>

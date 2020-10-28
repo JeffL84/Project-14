@@ -95,10 +95,18 @@ function App() {
         console.log(err);
       });
   }
-
+//trouble with state of infotooltip
   function handleLoginStatus() {
-    setLoggedIn(true);
+    console.log("infotooltipopen", isInfoToolTipOpen)
+    setLoggedIn(!loggedIn); //might need to modify this if used in multiple places
     setIsInfoToolTipOpen(true);
+    console.log("infotooltipopen after reset", isInfoToolTipOpen)
+  }
+
+  function handleLogout() {
+    setLoggedIn(!loggedIn);
+    console.log("handleLogout", loggedIn)
+    localStorage.setItem('jwt', "")
   }
 
   //CARD section stats here
@@ -140,7 +148,7 @@ function App() {
     api
       .removeCard(card._id)
       .then((remainingCard) => {
-        console.log(remainingCard);
+        //console.log(remainingCard);
         const remainingCards = cards.filter((item) => item._id !== card._id);
         setCards(remainingCards);
       })
@@ -160,6 +168,7 @@ function App() {
       .then((res) => {
         setEmail(res.data.email);
         handleLoginStatus();
+        console.log("loggedin, infotooltip", loggedIn, isInfoToolTipOpen)
       })
       .then(resetForm)
       .then(() => {
@@ -200,6 +209,7 @@ function App() {
         console.log(err);
       });
   }, []);
+
   //infotooltip Props might be off at this point
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -219,6 +229,7 @@ function App() {
                 link="/signin"
                 navText="Log Out"
                 email={currentUser.email}
+                handleLogout = {handleLogout}
               />
             </Route>
             <ProtectedRoute
