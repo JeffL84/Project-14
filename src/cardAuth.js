@@ -4,6 +4,7 @@ export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {
+      'Accept': 'application/json',
       "Content-Type": "application/json" 
     }, 
     body: JSON.stringify({email, password})
@@ -17,27 +18,29 @@ export const register = (email, password) => {
   .catch((err)=>console.log(err)); //possibly change this later related to Register.js
 }
 
-export const authorize = (identifier, password) => {
+export const authorize = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     headers: {
+      'Accept': 'application/json',
       "Content-Type": "application/json" 
     }, 
-    body: JSON.stringify({identifier, password})
+    body: JSON.stringify({email, password})
   })
   .then((response) => {
+    console.log('authorize', response);
     return response.json();
   })
   .then((data) => {
     if(data.user) {
       localStorage.setItem('jwt', data.jwt);
-      return data
+      return data;
     }
     else {
       return;
     }
   })
-  .catch((err)=>console.log(err)); //possibly change this later related to Login.js
+  .catch((err)=>console.log("authorize err", err)); //possibly change this later related to Login.js
 }
 
 //~3:30 in live coding if something is not working...
