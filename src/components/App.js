@@ -1,5 +1,11 @@
 import React from "react";
-import { Route, BrowserRouter, Switch, withRouter, useHistory } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter,
+  Switch,
+  withRouter,
+  useHistory,
+} from "react-router-dom";
 import ProtectedRoute from "./ProtectedRoute.js";
 import Register from "./Register.js";
 import Login from "./Login.js";
@@ -14,7 +20,7 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext.js";
 import EditProfilePopup from "./EditProfilePopup.js";
 import EditAvatarPopup from "./EditAvatarPopup.js";
 import AddPlacePopup from "./AddPlacePopup.js";
-import * as cardAuth from '.././cardAuth.js';
+import * as cardAuth from ".././cardAuth.js";
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(
@@ -31,6 +37,7 @@ function App() {
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [email, setEmail] = React.useState("");
   const [message, setMessage] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
   const history = useHistory();
 
@@ -43,6 +50,14 @@ function App() {
       .catch((err) => {
         console.log(err);
       });
+
+      api
+      .getCardList()
+      .then((res) => setCards(res))
+      .catch((err) => {
+        console.log(err);
+      });
+
   }, []);
 
   function closeAllPopups() {
@@ -95,18 +110,18 @@ function App() {
         console.log(err);
       });
   }
-//trouble with state of infotooltip
+  //trouble with state of infotooltip
   function handleLoginStatus() {
-    console.log("infotooltipopen", isInfoToolTipOpen)
+    //console.log("infotooltipopen", isInfoToolTipOpen);
     setLoggedIn(!loggedIn); //might need to modify this if used in multiple places
-    setIsInfoToolTipOpen(true);
-    console.log("infotooltipopen after reset", isInfoToolTipOpen)
+    //setIsInfoToolTipOpen(true);
+    //console.log("infotooltipopen after reset", isInfoToolTipOpen);
   }
 
   function handleLogout() {
     setLoggedIn(!loggedIn);
-    console.log("handleLogout", loggedIn)
-    localStorage.setItem('jwt', "")
+    console.log("handleLogout", loggedIn);
+    localStorage.setItem("jwt", "");
   }
 
   //CARD section stats here
@@ -159,6 +174,7 @@ function App() {
   const resetForm = () => {
     setEmail("");
     setMessage("");
+    setPassword("");
   };
 
   const checkToken = () => {
@@ -168,18 +184,19 @@ function App() {
       .then((res) => {
         setEmail(res.data.email);
         handleLoginStatus();
-        console.log("loggedin, infotooltip", loggedIn, isInfoToolTipOpen)
+        console.log("loggedin, infotooltip", loggedIn, isInfoToolTipOpen);
       })
       .then(resetForm)
       .then(() => {
         history.push("/users/me");
       })
-      .catch((err) => {setMessage(err.message);
-      console.log(message);})
+      .catch((err) => {
+        setMessage(err.message);
+        console.log(message);
+      });
   };
 
   const handleLogin = (email, password) => {
-    
     if (!password || !email) {
       return setMessage("You did not enter a password or email!");
     }
@@ -201,14 +218,36 @@ function App() {
       .catch((err) => setMessage(err.message));
   };
 
-  React.useEffect(() => {
-    api
-      .getCardList()
-      .then((res) => setCards(res))
+  const handleRegister = (email, password) => {
+
+    console.log("Register function");
+    // if (!password || !email) {
+    //   return setMessage("You did not enter a password or email!");
+    // };
+    cardAuth
+      .register(email, password)
+      .then((res) => {
+        console.log("Register pre error", res);
+        setIsInfoToolTipOpen(true);
+
+        if (res.error) {
+          return setMessage("You did not enter a password or email!");
+        }
+        console.log("Register", res);
+        if (!res || res.statusCode === 400) {
+          throw new Error("One of the fields was filled in incorrectly");
+        }
+        return res;
+      })
+      .then(resetForm)
+      .then(() => {
+        history.push("/signin");
+      })
       .catch((err) => {
-        console.log(err);
+        setMessage(err.message);
+        console.log(message);
       });
-  }, []);
+  };
 
   //infotooltip Props might be off at this point
   return (
@@ -216,24 +255,12 @@ function App() {
       <div className="page">
         <BrowserRouter>
           <Switch>
-            <Route path="/signup">
-              <Header link="/signin" navText="login" />
-              <Register handleLogin={handleLogin} />
-            </Route>
-            <Route path="/signin">
-              <Header link="signup" navText="register" />
-              <Login handleLogin={handleLogin} />
-            </Route>
-            <Route>
-              <Header
-                link="/signin"
-                navText="Log Out"
-                email={currentUser.email}
-                handleLogout = {handleLogout}
-              />
-            </Route>
-            <ProtectedRoute
-              path="/users/me"
+
+          <ProtectedRoute
+              exact path="/users/me"
+              link="/signin"
+              navText="Log Out"
+              handleLogout={handleLogout}
               loggedIn={loggedIn}
               onEditProfile={handleProfileClick}
               onAddPlace={handleAddPlaceClick}
@@ -245,6 +272,29 @@ function App() {
               onCardDelete={handleCardDelete}
               component={Main}
             />
+
+            <Route path="/signup">
+              <Header link="/signin" navText="login" />
+              <Register handleRegister={handleRegister} />
+            </Route>
+
+            <Route path="/signin">
+              <Header link="signup" navText="register" />
+              <Login handleLogin={handleLogin} />
+            </Route>
+
+            <Route path="/main">
+              <Main loggedIn={loggedIn}
+              onEditProfile={handleProfileClick}
+              onAddPlace={handleAddPlaceClick}
+              onEditAvatar={handleEditAvatarClick}
+              onCardClick={handleCardClick} //might have issue here - used twice...
+              selectedCard={selectedCard}
+              cards={cards}
+              onCardLike={handleCardLike}
+              onCardDelete={handleCardDelete}/>
+            </Route>
+           
             <EditProfilePopup
               isOpen={isEditProfilePopupOpen}
               onUpdateUser={handleUpdateUser}
@@ -274,7 +324,11 @@ function App() {
               onClick={handleCardClick}
             />
 
-            <InfoToolTip isOpened={isInfoToolTipOpen} isValid={loggedIn} />
+            <InfoToolTip
+              isOpened={isInfoToolTipOpen}
+              isValid={loggedIn}
+              name="infotooltip"
+            />
             <Footer />
           </Switch>
         </BrowserRouter>

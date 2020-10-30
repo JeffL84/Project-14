@@ -99,7 +99,7 @@ function Login(props) {
       <button
         className="register__save-button"
         type="submit"
-        onClick={handleSubmit}
+        //onClick={handleSubmit}
       >
         Sign In
       </button>

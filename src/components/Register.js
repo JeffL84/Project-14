@@ -1,44 +1,49 @@
 import React, { useEffect } from "react";
 import { useHistory, Link, withRouter } from "react-router-dom";
-import * as cardAuth from "../cardAuth.js";
+//import * as cardAuth from "../cardAuth.js";
 //import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 //import { api } from '../utils/api.js';
 
-function Register() {
+function Register(props) {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [message, setMessage] = React.useState("");
+  // const [message, setMessage] = React.useState("");
 
   const history = useHistory();
 
-  const resetForm = () => {
-    setEmail("");
-    setPassword("");
-    setMessage("");
-  };
+  // const resetForm = () => {
+  //   setEmail("");
+  //   setPassword("");
+  //   setMessage("");
+  // };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!password || !email) {
-      return setMessage("You did not enter a password or email!");
-    }
-    cardAuth
-      .register(email, password)
-      .then((res) => {
-        if (!res || res.statusCode === 400) {
-          throw new Error("One of the fields was filled in incorrectly");
-        }
-        return res;
-      })
-      .then(resetForm)
-      .then(() => {
-        history.push("/signin");
-      })
-      .catch((err) => {
-        setMessage(err.message);
-        console.log(message);
-      });
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (!password || !email) {
+  //     return setMessage("You did not enter a password or email!");
+  //   }
+  //   cardAuth
+  //     .register(email, password)
+  //     .then((res) => {
+  //       if (!res || res.statusCode === 400) {
+  //         throw new Error("One of the fields was filled in incorrectly");
+  //       }
+  //       return res;
+  //     })
+  //     .then(resetForm)
+  //     .then(() => {
+  //       history.push("/signin");
+  //     })
+  //     .catch((err) => {
+  //       setMessage(err.message);
+  //       console.log(message);
+  //     });
+  // };
+
+// const handleSubmit = (e) => {
+//   //e.preventDefault();
+//   props.handleRegister(email, password);
+// }
 
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
@@ -46,11 +51,10 @@ function Register() {
     }
   });
 
-  //this is NOT DONE and none of the css is written!!!
   return (
     //<CurrentUserContext.Provider value={currentUser}>
     <section className="register">
-      <form className="register__container" onSubmit={handleSubmit}>
+      <form className="register__container" onSubmit={props.handleRegister(email, password)}>
         <h2 className="register__title">Sign Up</h2>
 
         <input
@@ -80,7 +84,7 @@ function Register() {
         <button
           className="register__save-button"
           type="submit"
-          onClick={handleSubmit}
+          onClick={props.handleRegister}
         >
           Sign Up
         </button>
