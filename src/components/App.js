@@ -51,14 +51,13 @@ function App() {
         console.log(err);
       });
 
-      api
+    api
       .getCardList()
       .then((res) => setCards(res))
       .catch((err) => {
         console.log(err);
       });
-
-  }, []);
+  }, [history]);
 
   function closeAllPopups() {
     setIsEditProfilePopupOpen(false);
@@ -188,7 +187,7 @@ function App() {
       })
       .then(resetForm)
       .then(() => {
-        history.push("/users/me");
+        history.push("/");
       })
       .catch((err) => {
         setMessage(err.message);
@@ -212,14 +211,13 @@ function App() {
         checkToken();
       })
       .then(resetForm)
-      .then(() => {
-        history.push("/users/me");
-      })
+      // .then(() => {
+      //   history.push("/");
+      // })
       .catch((err) => setMessage(err.message));
   };
 
   const handleRegister = (email, password) => {
-
     console.log("Register function");
     // if (!password || !email) {
     //   return setMessage("You did not enter a password or email!");
@@ -255,9 +253,9 @@ function App() {
       <div className="page">
         <BrowserRouter>
           <Switch>
-
-          <ProtectedRoute
-              exact path="/users/me"
+            <ProtectedRoute
+              exact
+              path="/"
               link="/signin"
               navText="Log Out"
               handleLogout={handleLogout}
@@ -284,17 +282,19 @@ function App() {
             </Route>
 
             <Route path="/main">
-              <Main loggedIn={loggedIn}
-              onEditProfile={handleProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onEditAvatar={handleEditAvatarClick}
-              onCardClick={handleCardClick} //might have issue here - used twice...
-              selectedCard={selectedCard}
-              cards={cards}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}/>
+              <Main
+                loggedIn={loggedIn}
+                onEditProfile={handleProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onEditAvatar={handleEditAvatarClick}
+                onCardClick={handleCardClick} //might have issue here - used twice...
+                selectedCard={selectedCard}
+                cards={cards}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+              />
             </Route>
-           
+
             <EditProfilePopup
               isOpen={isEditProfilePopupOpen}
               onUpdateUser={handleUpdateUser}

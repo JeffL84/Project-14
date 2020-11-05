@@ -12,7 +12,7 @@ function Login(props) {
   const handleSubmit = (e) => {
     e.preventDefault();
     props.handleLogin(email, password);
-  }
+  };
 
   // const resetForm = () => {
   //   setEmail("");
@@ -30,7 +30,7 @@ function Login(props) {
   //     })
   //     .then(resetForm)
   //     .then(() => {
-  //       history.push("/users/me");
+  //       history.push("/");
   //     })
   //     .catch((err) => {setMessage(err.message);
   //     console.log(message);})
@@ -54,16 +54,16 @@ function Login(props) {
   //     })
   //     .then(resetForm)
   //     .then(() => {
-  //       history.push("/users/me");
+  //       history.push("/");
   //     })
   //     .catch((err) => setMessage(err.message));
   // };
 
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
-      history.push("/users/me"); //make sure to build this route
+      history.push("/"); //make sure to build this route
     }
-  });
+  }, [history]);
 
   return (
     <form

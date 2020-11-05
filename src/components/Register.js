@@ -40,21 +40,24 @@ function Register(props) {
   //     });
   // };
 
-// const handleSubmit = (e) => {
-//   //e.preventDefault();
-//   props.handleRegister(email, password);
-// }
+  // const handleSubmit = (e) => {
+  //   //e.preventDefault();
+  //   props.handleRegister(email, password);
+  // }
 
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
-      history.push("/users/me"); //make sure to build this route
+      history.push("/"); //make sure to build this route
     }
-  });
+  }, [history]);
 
   return (
     //<CurrentUserContext.Provider value={currentUser}>
     <section className="register">
-      <form className="register__container" onSubmit={props.handleRegister(email, password)}>
+      <form
+        className="register__container"
+        onSubmit={props.handleRegister(email, password)}
+      >
         <h2 className="register__title">Sign Up</h2>
 
         <input
